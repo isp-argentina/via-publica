@@ -176,4 +176,3 @@ export function usePasswordValidator(validateMatch = false) {
     validatePasswordMatch,
   }
 }
-

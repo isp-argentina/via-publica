@@ -358,4 +358,3 @@ export default function BillboardFilters({ initialFilters }: BillboardFiltersPro
     </div>
   )
 }
-

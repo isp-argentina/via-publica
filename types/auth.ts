@@ -95,4 +95,3 @@ export const passwordRequirements = [
   "Al menos un número",
   "Al menos un carácter especial (@$!%*?&)",
 ]
-

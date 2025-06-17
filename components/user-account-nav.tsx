@@ -14,7 +14,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { User, LogOut, Settings, FileText, MessageSquare, PlusCircle, LayoutDashboard } from "lucide-react"
+// Agregar los nuevos iconos de importación
+import {
+  User,
+  LogOut,
+  Settings,
+  Heart,
+  MessageSquare,
+  PlusCircle,
+  LayoutDashboard,
+  Crown,
+  Mail,
+  Building2,
+  BarChart3,
+  Download,
+} from "lucide-react"
 
 export default function UserAccountNav() {
   const { user, logout } = useAuth()
@@ -42,81 +56,126 @@ export default function UserAccountNav() {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-8 w-8">
-            <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-          </Avatar>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user.name}</p>
-            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href="/perfil">
-              <User className="mr-2 h-4 w-4" />
-              <span>Perfil</span>
-            </Link>
+    <div className="flex items-center gap-4">
+      {/* Saludo personalizado */}
+      <span className="text-sm font-bold hidden md:block">¡Hola {user.name.split(" ")[0]}!</span>
+
+      {/* Menú desplegable del avatar */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Avatar className="h-8 w-8">
+              <AvatarFallback style={{ backgroundColor: "#f4a460" }} className="text-white font-semibold">
+                {getInitials(user.name)}
+              </AvatarFallback>
+            </Avatar>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium leading-none">{user.name}</p>
+              <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user.role === "usuario"
+                  ? "Usuario"
+                  : user.role === "cliente"
+                    ? user.clienteType === "dueno"
+                      ? "Propietario"
+                      : "Agencia"
+                    : "Administrador"}
+              </p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem asChild>
+              <Link href="/perfil">
+                <User className="mr-2 h-4 w-4" />
+                <span>Mi Perfil</span>
+              </Link>
+            </DropdownMenuItem>
+
+            {user.role === "usuario" && (
+              <>
+                <DropdownMenuItem asChild>
+                  <Link href="/favoritos">
+                    <Heart className="mr-2 h-4 w-4" />
+                    <span>Mis Favoritos</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/mensajes">
+                    <MessageSquare className="mr-2 h-4 w-4" />
+                    <span>Mis Mensajes</span>
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            )}
+
+            {permissions.canPublishBillboards && (
+              <>
+                <DropdownMenuItem asChild>
+                  <Link href="/mis-carteles">
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <span>Mis Carteles</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/publicar-cartel">
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    <span>Publicar Cartel</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/consultas-recibidas">
+                    <Mail className="mr-2 h-4 w-4" />
+                    <span>Consultas Recibidas</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/plan-servicio">
+                    <Crown className="mr-2 h-4 w-4" />
+                    <span>Mi Plan</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/mi-agencia">
+                    <Building2 className="mr-2 h-4 w-4" />
+                    <span>Mi Agencia</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/informes">
+                    <BarChart3 className="mr-2 h-4 w-4" />
+                    <span>Informes</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/descargas">
+                    <Download className="mr-2 h-4 w-4" />
+                    <span>Descargas</span>
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            )}
+
+            {permissions.canAccessAdminPanel && (
+              <DropdownMenuItem asChild>
+                <Link href="/admin">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Panel de Administración</span>
+                </Link>
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => logout()}>
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Cerrar Sesión</span>
           </DropdownMenuItem>
-
-          {permissions.canSaveFavorites && (
-            <DropdownMenuItem asChild>
-              <Link href="/favoritos">
-                <FileText className="mr-2 h-4 w-4" />
-                <span>Mis Favoritos</span>
-              </Link>
-            </DropdownMenuItem>
-          )}
-
-          {permissions.canPublishBillboards && (
-            <>
-              <DropdownMenuItem asChild>
-                <Link href="/mis-espacios">
-                  <LayoutDashboard className="mr-2 h-4 w-4" />
-                  <span>Mis Espacios</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/publicar-espacio">
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  <span>Publicar Espacio</span>
-                </Link>
-              </DropdownMenuItem>
-            </>
-          )}
-
-          {permissions.canViewInquiries && (
-            <DropdownMenuItem asChild>
-              <Link href="/consultas">
-                <MessageSquare className="mr-2 h-4 w-4" />
-                <span>Consultas Recibidas</span>
-              </Link>
-            </DropdownMenuItem>
-          )}
-
-          {permissions.canAccessAdminPanel && (
-            <DropdownMenuItem asChild>
-              <Link href="/admin">
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Panel de Administración</span>
-              </Link>
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => logout()}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Cerrar Sesión</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }
-

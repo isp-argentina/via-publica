@@ -19,7 +19,7 @@ import { SelectableCard } from "@/components/selectable-card"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import type { UserRole, ClienteType } from "@/types/auth"
-import { User, Building2, Users } from "lucide-react"
+import { User, Building2, Users, Search } from "lucide-react"
 
 export default function RegisterPageClient() {
   const { register, error: authError, isLoading } = useAuth()
@@ -144,6 +144,11 @@ export default function RegisterPageClient() {
       return false
     }
 
+    if (!role) {
+      setError("Debes seleccionar un tipo de usuario")
+      return false
+    }
+
     if (!acceptTerms) {
       setError("Debes aceptar los términos y condiciones")
       return false
@@ -221,7 +226,11 @@ export default function RegisterPageClient() {
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold">Crear una cuenta</CardTitle>
             <CardDescription>
-              {currentStep === 1 ? "Completa tus datos personales para registrarte" : "Configura tu tipo de cuenta"}
+              {currentStep === 1
+                ? "Completa tus datos personales para registrarte"
+                : role === "cliente"
+                  ? "Configura tu perfil como publicador de espacios"
+                  : "Completa tu información de contacto"}
             </CardDescription>
           </CardHeader>
 
@@ -281,6 +290,29 @@ export default function RegisterPageClient() {
                   {!isPasswordMatchValid && <p className="text-sm text-red-500">{passwordMatchError}</p>}
                 </div>
 
+                {/* Nueva sección de selección de tipo de usuario */}
+                <div className="space-y-3">
+                  <Label>¿Qué tipo de usuario eres?</Label>
+                  <div className="grid gap-3">
+                    <SelectableCard
+                      id="busco-carteles"
+                      title="Busco Carteles"
+                      description="Quiero encontrar espacios publicitarios para mis campañas"
+                      icon={<Search className="h-5 w-5 text-primary" />}
+                      selected={role === "usuario"}
+                      onClick={() => setRole("usuario")}
+                    />
+                    <SelectableCard
+                      id="publico-carteles"
+                      title="Quiero Publicar Carteles"
+                      description="Tengo espacios publicitarios que quiero ofrecer"
+                      icon={<Building2 className="h-5 w-5 text-primary" />}
+                      selected={role === "cliente"}
+                      onClick={() => setRole("cliente")}
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <Checkbox
@@ -322,44 +354,22 @@ export default function RegisterPageClient() {
             // Paso 2: Selección de rol y datos adicionales
             <form onSubmit={handleRegister}>
               <CardContent className="space-y-6">
-                <div className="space-y-3">
-                  <Label>Tipo de cuenta</Label>
-                  <div className="grid gap-3">
-                    <SelectableCard
-                      id="usuario"
-                      title="Usuario"
-                      description="Busco espacios publicitarios"
-                      icon={<User className="h-5 w-5 text-primary" />}
-                      selected={role === "usuario"}
-                      onClick={() => setRole("usuario")}
-                    />
-                    <SelectableCard
-                      id="cliente"
-                      title="Cliente"
-                      description="Tengo espacios publicitarios"
-                      icon={<Building2 className="h-5 w-5 text-primary" />}
-                      selected={role === "cliente"}
-                      onClick={() => setRole("cliente")}
-                    />
-                  </div>
-                </div>
-
                 {role === "cliente" && (
                   <div className="space-y-3">
-                    <Label>Tipo de cliente</Label>
+                    <Label>Tipo de publicador</Label>
                     <div className="grid gap-3">
                       <SelectableCard
                         id="dueno"
-                        title="Cliente Particular"
-                        description="Soy dueño directo de espacios publicitarios"
+                        title="Propietario Individual"
+                        description="Soy dueño directo de uno o pocos espacios publicitarios"
                         icon={<User className="h-5 w-5 text-primary" />}
                         selected={clienteType === "dueno"}
                         onClick={() => setClienteType("dueno")}
                       />
                       <SelectableCard
                         id="agencia"
-                        title="Empresa / Agencia de Publicidad"
-                        description="Representamos múltiples espacios publicitarios"
+                        title="Empresa / Agencia"
+                        description="Represento múltiples espacios publicitarios o soy una agencia"
                         icon={<Users className="h-5 w-5 text-primary" />}
                         selected={clienteType === "agencia"}
                         onClick={() => setClienteType("agencia")}
@@ -452,4 +462,3 @@ export default function RegisterPageClient() {
     </div>
   )
 }
-

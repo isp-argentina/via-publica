@@ -46,4 +46,3 @@ export function SelectableCard({ id, title, description, icon, selected, onClick
     </div>
   )
 }
-

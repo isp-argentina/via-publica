@@ -72,32 +72,72 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthState({ ...authState, isLoading: true, error: null })
 
     try {
-      // Aquí iría la lógica real de autenticación con el backend
-      // Por ahora, simulamos una respuesta exitosa
-
-      // Simulación de respuesta del servidor
-      const mockUser: User = {
-        id: "user-123",
-        name: "Usuario Demo",
-        email,
-        role: "usuario", // Por defecto asignamos rol de usuario
-        emailVerified: true,
-        createdAt: new Date(),
+      // Usuarios de prueba con diferentes roles
+      const testUsers = {
+        "usuario@test.com": {
+          id: "user-123",
+          name: "Ana García",
+          email: "usuario@test.com",
+          role: "usuario" as UserRole,
+          emailVerified: true,
+          createdAt: new Date(),
+        },
+        "cliente@test.com": {
+          id: "client-456",
+          name: "Carlos Mendoza",
+          email: "cliente@test.com",
+          role: "cliente" as UserRole,
+          clienteType: "dueno" as ClienteType,
+          phone: "+54 11 1234-5678",
+          emailVerified: true,
+          createdAt: new Date(),
+        },
+        "agencia@test.com": {
+          id: "agency-789",
+          name: "María López",
+          email: "agencia@test.com",
+          role: "cliente" as UserRole,
+          clienteType: "agencia" as ClienteType,
+          phone: "+54 11 9876-5432",
+          emailVerified: true,
+          createdAt: new Date(),
+        },
+        "admin@test.com": {
+          id: "admin-999",
+          name: "Roberto Admin",
+          email: "admin@test.com",
+          role: "administrador" as UserRole,
+          phone: "+54 11 5555-5555",
+          emailVerified: true,
+          createdAt: new Date(),
+        },
       }
 
-      // Guardar en localStorage
-      localStorage.setItem("viapublica_user", JSON.stringify(mockUser))
+      // Verificar si es un usuario de prueba
+      const testUser = testUsers[email as keyof typeof testUsers]
 
-      setAuthState({
-        user: mockUser,
-        isLoading: false,
-        error: null,
-      })
+      if (testUser && password === "Test123!") {
+        // Guardar en localStorage
+        localStorage.setItem("viapublica_user", JSON.stringify(testUser))
+
+        setAuthState({
+          user: testUser,
+          isLoading: false,
+          error: null,
+        })
+      } else {
+        // Credenciales incorrectas
+        setAuthState({
+          ...authState,
+          isLoading: false,
+          error: "Credenciales incorrectas",
+        })
+      }
     } catch (error) {
       setAuthState({
         ...authState,
         isLoading: false,
-        error: "Credenciales incorrectas",
+        error: "Error al iniciar sesión",
       })
     }
   }
@@ -241,4 +281,3 @@ export function useAuth() {
   }
   return context
 }
-

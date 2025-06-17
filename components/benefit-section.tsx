@@ -45,4 +45,3 @@ export default function BenefitSection({ title, description, benefits }: Benefit
     </section>
   )
 }
-

@@ -27,7 +27,7 @@ export default function Navbar() {
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Image
-              src="/images/viapublica-logo.svg"
+              src="https://sjjfexdrfeimv3f6.public.blob.vercel-storage.com/assets/logos/viapublica/viapublica-logo-RxGkXkykLJhpX6yooUW1AQUMuT18wQ.svg"
               alt="Vía Pública Logo"
               width={120}
               height={40}
@@ -152,7 +152,7 @@ export default function Navbar() {
         </div>
         <Link href="/" className="mr-6 flex items-center space-x-2 md:hidden">
           <Image
-            src="/images/viapublica-logo.svg"
+            src="https://sjjfexdrfeimv3f6.public.blob.vercel-storage.com/assets/logos/viapublica/viapublica-logo-RxGkXkykLJhpX6yooUW1AQUMuT18wQ.svg"
             alt="Vía Pública Logo"
             width={100}
             height={32}
@@ -188,7 +188,7 @@ export default function Navbar() {
               <nav className="grid gap-6 text-lg font-medium">
                 <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
                   <Image
-                    src="/images/viapublica-logo.svg"
+                    src="https://sjjfexdrfeimv3f6.public.blob.vercel-storage.com/assets/logos/viapublica/viapublica-logo-RxGkXkykLJhpX6yooUW1AQUMuT18wQ.svg"
                     alt="Vía Pública Logo"
                     width={100}
                     height={32}
@@ -227,4 +227,3 @@ export default function Navbar() {
     </header>
   )
 }
-

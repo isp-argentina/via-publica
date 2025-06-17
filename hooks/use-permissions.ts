@@ -17,4 +17,3 @@ export function usePermissions() {
     canAccessAdminPanel: hasPermission("canAccessAdminPanel"),
   }
 }
-
